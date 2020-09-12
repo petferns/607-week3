@@ -1,0 +1,155 @@
+---
+title: "Assignment3 - R Character Manipulation"
+author: "Peter"
+date: "9/11/2020"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+# Introduction
+
+This assignment deals with string manipulation below are 4 exercises
+```{r}
+library(DT)
+library(stringr)
+```
+### Exercise 1
+
+1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+#### Answer
+
+```{r}
+
+majors <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/2d2ff3e9457549d51f8e571c52099bfe9b2017ad/college-majors/majors-list.csv")
+filtered <- majors$Major %>% str_subset("DATA|STATISTICS")
+filtered
+```
+### Exercise 2
+
+2. Write code that transforms the data below:
+
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"
+
+Into a format like this:
+
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+#### Answer
+
+
+```{r warning=FALSE}
+str <- '[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"'
+str2 <- str_extract_all(str,pattern = '[A-Za-z]+.?[A-Za-z]+')
+vect <- str_c(str2, collapse = ", ")
+writeLines(vect)
+```
+### Exercise 3
+
+3. Describe, in words, what these expressions will match:
+
+
+i) (.)\1\1
+
+#### Answer
+
+
+Match any character appearing 3 times in a row
+```{r}
+sample <- c("Awww","Hmmm","lol")
+str_view(sample,"(.)\\1\\1")
+```
+
+ii) "(.)(.)\\2\\1"
+
+#### Answer
+
+
+Match any words pair of characters followed by same pair of character is reversed order  
+```{r}
+sample <- c("noon","teeth")
+str_view(sample,"(.)(.)\\2\\1")
+```
+
+
+iii) (..)\1
+
+#### Answer
+
+
+Matches a pair of characters which has a repetition of same pair
+```{r}
+sample <- c("dada","haha")
+str_view(sample,"(..)\\1")
+```
+iv)"(.).\\1.\\1"
+
+#### Answer
+
+
+Match a expression which has - a character followed by any character then the same character as initial character then again any character ended by the same as first character
+```{r}
+sample <- c("abaha")
+str_view(sample,"(.).\\1.\\1")
+```
+
+
+v) "(.)(.)(.).*\\3\\2\\1"
+
+#### Answer
+
+
+Match any expression which are in - 3 characters followed by 0 or more characters then followed by 3 characters of the start in reverse order
+
+```{r}
+
+sample <- c("momismom")
+str_view(sample,"(.)(.)(.).*\\3\\2\\1")
+```
+
+### Exercise 4
+
+4) Construct regular expressions to match words that:
+
+i)Start and end with the same character.
+
+#### Answer
+
+
+```{r}
+str_view(c("dad","settings","day"),"(.).*\\1")
+```
+
+
+ii) Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+
+#### Answer
+
+
+```{r}
+str_view(c("church","joggingg"),"(..).*\\1")
+```
+
+
+iii)Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+
+#### Answer
+
+
+```{r}
+str_view(c("deleven","five"),"(.).*\\1.*\\1")
+```
+
